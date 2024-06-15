@@ -73,6 +73,19 @@
       background-color: #4cae4c;
     }
   </style>
+  <script>
+    function login() {
+      const userId = document.getElementById('userId').value;
+      const password = document.getElementById('password').value;
+      google.script.run.withSuccessHandler(post(token)).login(userId, password);
+    }
+
+    function post(token) {
+      console.log(token);
+      document.cookie = "token=" + token +"; Secure";
+    }
+
+  </script>
 </head>
 
 <body>
@@ -82,8 +95,8 @@
     <h3><?= errorMessage ?></h3>
     <form action="<?= deployURL ?>" method="POST">
       <input type="hidden" page="menu">
-      <label for="username">ユーザー名</label>
-      <input type="text" id="username" name="username" required>
+      <label for="userId">ユーザーID</label>
+      <input type="text" id="userId" name="userId" required>
 
       <label for="password">パスワード</label>
       <input type="password" id="password" name="password" required>
