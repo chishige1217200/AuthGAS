@@ -60,9 +60,9 @@ function login(userId, password) {
   let rowCount = 0;
   let token = 'dummy'; // 失敗時はダミートークンが返却される
 
-  for (let i = 1; i < sessions.length + 1; i++) { // 行数補正
-    if (sessions[i][0] === userId && sessions[2]["password"] === password) {
-      rowCount = i;
+  for (let i = 0; i < sessions.length; i++) {
+    if (sessions[i][0] === userId && sessions[i][2] === password) {
+      rowCount = i + 1; // 行数補正
       break;
     }
   }

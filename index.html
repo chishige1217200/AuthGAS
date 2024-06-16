@@ -74,15 +74,36 @@
     }
   </style>
   <script>
-    function login() {
-      const userId = document.getElementById('userId').value;
-      const password = document.getElementById('password').value;
-      google.script.run.withSuccessHandler(post(token)).login(userId, password);
+    function setSecureCookie(name, value, days) {
+      let expires = "";
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = `${name}=${value || ""}${expires}; path=/; samesite=strict; secure`;
     }
 
-    function post(token) {
-      console.log(token);
-      document.cookie = "token=" + token +"; Secure";
+    function getSecureCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+
+    function doa() {
+      const userId = document.getElementById('userId').value;
+      const password = document.getElementById('password').value;
+      google.script.run.withSuccessHandler(posta).login(userId, password);
+    }
+
+    function posta(token) {
+      setSecureCookie('token', token, 1);
+      console.log(getSecureCookie('token'));
     }
 
   </script>
@@ -103,6 +124,7 @@
 
       <button type="submit">ログイン</button>
     </form>
+    <iframe name="dummy" style="width:0px;height:0px;border:0px;"></iframe>
   </div>
 </body>
 
