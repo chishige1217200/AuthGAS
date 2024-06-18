@@ -121,7 +121,7 @@ function doGet(e) {
 
 function doPost(e) {
   let page = e.parameter.page;
-  let name = ''
+  let name = '';
   let token = e.parameter.token;
 
   if (!checkToken(token)) {
