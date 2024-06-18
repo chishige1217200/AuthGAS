@@ -3,11 +3,66 @@
 
 <head>
   <base target="_top">
+  <script>
+    function setSecureCookie(name, value, days) {
+      let expires = "";
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = `${name}=${encodeURIComponent(value || "")}${expires}; Secure; Path=/; SameSite=None; Partitioned;`;
+    }
+
+    function getSecureCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+
+    function doa(num)
+    {
+      var form = document.createElement('form');
+
+      form.method = 'POST';
+      form.action = '<?= deployURL ?>';
+
+      const data1 = document.createElement('input');
+      data1.type = 'hidden';
+      data1.name = 'page';
+      data1.value = document.getElementById('page' + num).value;
+
+      const data2 = document.createElement('input');
+      data2.type = 'hidden';
+      data2.name = 'token';
+      data2.value = getSecureCookie('__Host-SID');
+
+      form.appendChild(data1);
+      form.appendChild(data2);
+      document.body.appendChild(form);
+
+      form.submit();
+    }
+
+  </script>
 </head>
 
 <body>
-  <a href="<?= getAppUrl() ?>?page=page1">PAGE1へ</a>
-  <a href="<?= getAppUrl() ?>?page=page2">PAGE2へ</a>
+  <form onsubmit="doa('1')" target="dummy">
+    <input id="page1" type="hidden" value="404">
+    <button type="submit">404</button>
+  </form>
+
+  <form onsubmit="doa('2')" target="dummy">
+    <input id="page2" type="hidden" value="403">
+    <button type="submit">403</button>
+  </form>
+  <iframe name="dummy" style="width:0px;height:0px;border:0px;"></iframe>
 </body>
 
 </html>
