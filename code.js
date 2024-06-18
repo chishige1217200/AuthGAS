@@ -124,14 +124,14 @@ function doPost(e) {
   let name = '';
   let token = e.parameter.token;
 
+  console.log(token);
+
   if (!checkToken(token)) {
     page = 'index';
     name = 'ログイン画面';
   }
   else {
     console.log("トークンは有効です");
-    page = 'menu';
-    name = 'メニュー画面';
   }
 
   // HTML Templateを生成

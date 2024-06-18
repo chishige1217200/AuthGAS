@@ -102,8 +102,29 @@
     }
 
     function posta(token) {
+      console.log(token);
       setSecureCookie('__Host-SID', token, 1);
-      console.log(getSecureCookie('__Host-SID'));
+
+      var form = document.createElement('form');
+
+      form.method = 'POST';
+      form.action = '<?= deployURL ?>';
+
+      const data1 = document.createElement('input');
+      data1.type = 'hidden';
+      data1.name = 'page';
+      data1.value = 'menu';
+
+      const data2 = document.createElement('input');
+      data2.type = 'hidden';
+      data2.name = 'token';
+      data2.value = token;
+
+      form.appendChild(data1);
+      form.appendChild(data2);
+      document.body.appendChild(form);
+
+      form.submit();
     }
 
   </script>
