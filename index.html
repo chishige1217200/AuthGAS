@@ -81,8 +81,8 @@
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
       }
-      document.cookie = `${name}=${value || ""}${expires}; path=/; samesite=strict; secure`;
-    }
+      document.cookie = `${name}=${encodeURIComponent(value || "")}${expires}; Secure; Path=/; SameSite=None; Partitioned;`;
+}
 
     function getSecureCookie(name) {
       const nameEQ = name + "=";
@@ -102,8 +102,8 @@
     }
 
     function posta(token) {
-      setSecureCookie('token', token, 1);
-      console.log(getSecureCookie('token'));
+      setSecureCookie('__Host-SID', token, 1);
+      console.log(getSecureCookie('__Host-SID'));
     }
 
   </script>
@@ -113,8 +113,10 @@
   <div class="login-container">
     <h1>GAS認証システム</h1>
     <h2>ログイン</h2>
-    <h3><?= errorMessage ?></h3>
-    <form action="<?= deployURL ?>" method="POST">
+    <h3>
+      <?= errorMessage ?>
+    </h3>
+    <form onsubmit="doa()" target="dummy">
       <input type="hidden" page="menu">
       <label for="userId">ユーザーID</label>
       <input type="text" id="userId" name="userId" required>
